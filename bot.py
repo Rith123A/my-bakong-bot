@@ -71,24 +71,32 @@ def extract_account_to_file(product_key, quantity=1):
 def check_payment_status(p_hash):
     url = "https://api-bakong.nbc.gov.kh/v1/check_transaction_by_md5" 
     
-    # ប្រាកដថា Token ថ្មី ហើយគ្មានដកឃ្លាខុសបច្ចេកទេស
     headers = {
         "Authorization": f"Bearer {BAKONG_TOKEN.strip()}",
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        # បន្ថែម User-Agent នៅទីនេះ ដើម្បីកុំឱ្យ CloudFront Block
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
     
     payload = {"md5": p_hash} 
     try:
-        response = requests.post(url, json=payload, headers=headers, timeout=15)
+        # បន្ថែម verify=True (Default) ឬសាកល្បងដាក់ timeout ឱ្យយូរជាងមុនបន្តិច
+        response = requests.post(url, json=payload, headers=headers, timeout=20)
         
-        # បន្ថែមការ Print ដើម្បីមើលក្នុង Logs ថាវាលោត 403 មែនអត់
-        print(f"DEBUG: Bakong Check -> Status: {response.status_code} | Body: {response.text}")
+        print(f"DEBUG: Bakong Check -> Status: {response.status_code}")
         
         if response.status_code == 200:
             data = response.json()
+            print(f"DEBUG: Data -> {data}")
             if data.get("responseCode") == 0 or data.get("responseCode") == "0":
                 return True
+            if data.get("data") and data["data"].get("status") == "SUCCESS":
+                return True
+        else:
+            # បើនៅតែ 403 ទៀត វានឹងបង្ហាញ Body ឱ្យយើងមើល
+            print(f"DEBUG: Response Body -> {response.text[:200]}")
+            
     except Exception as e:
         print(f"DEBUG: Error -> {e}")
     return False
