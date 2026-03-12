@@ -2,3 +2,7 @@ pyTelegramBotAPI
 requests
 bakong-khqr
 flask
+pyTelegramBotAPI
+requests
+bakong-khqr[image]
+flask
