@@ -29,8 +29,8 @@ BAKONG_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiMWUyN2Q
 # បញ្ជីផលិតផល (Product Key ត្រូវតែដូចឈ្មោះ File .txt)
 PRODUCTS = {
     'noverify': {'name': 'Acc Form No Verify', 'price': 0.01},
-    'fullset_no2fa': {'name': 'Full Set No 2FA', 'price': 5.00},
-    'fullset': {'name': 'Full Set (មាន 2FA)', 'price': 7.00}
+    'fullset_no2fa': {'name': 'Full Set No 2FA', 'price': 0.30},
+    'fullset': {'name': 'Full Set (មាន 2FA)', 'price': 0.50}
 }
 
 user_orders = {}
