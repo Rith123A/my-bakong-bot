@@ -24,7 +24,7 @@ TOKEN = '8614978833:AAFbiZkZCarmUWZjJBKFoe18lyqUVzbSSls'
 bot = telebot.TeleBot(TOKEN)
 
 # Bakong Token របស់អ្នក
-BAKONG_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiMWUyN2QzM2NiYzNiNDkzNCJ9LCJpYXQiOjE3NzMzMjc5NDksImV4cCI6MTc4MTEwMzk0OX0.l7hf9D8k-_wGqLgdab4Tnon93ydGVL3hMI2gp4zumX0"
+BAKONG_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiMWUyN2QzM2NiYzNiNDkzNCJ9LCJpYXQiOjE3NzMzMjkxODMsImV4cCI6MTc4MTEwNTE4M30.tQaFRnrhJD1sMxh_dQLuPwHYEQrEKo-XCyUtPUCAb2M"
 
 # បញ្ជីផលិតផល (Product Key ត្រូវតែដូចឈ្មោះ File .txt)
 PRODUCTS = {
@@ -77,18 +77,26 @@ def check_payment_status(p_hash):
     payload = {"md5": p_hash} 
     try:
         response = requests.post(url, json=payload, headers=headers, timeout=15)
-        data = response.json()
-        
-        # បន្ថែមបន្ទាត់នេះ ដើម្បីឱ្យវាបង្ហាញក្នុង Logs របស់ Koyeb
-        print(f"DEBUG: Bakong Check -> Hash: {p_hash} | Response: {data}")
-        
         if response.status_code == 200:
-            if data.get("responseCode") == 0 or data.get("responseCode") == "0":
+            data = response.json()
+            # បន្ថែមការ Print នេះ ដើម្បីឱ្យអ្នកឃើញក្នុង Koyeb Logs ថា Bakong ឆ្លើយមកវិញថាអី
+            print(f"DEBUG: Bakong Response -> {data}")
+            
+            # លក្ខខណ្ឌទី១: ឆែកតាម Response Code
+            res_code = data.get("responseCode")
+            if res_code == 0 or res_code == "0":
                 return True
-            if data.get("data") and data["data"].get("status") == "SUCCESS":
-                return True
+                
+            # លក្ខខណ្ឌទី២: ឆែកក្នុង Data Object (ករណីខ្លះ ResponseCode មិនមែន 0 តែ Status ជា SUCCESS)
+            inner_data = data.get("data")
+            if inner_data and isinstance(inner_data, dict):
+                if inner_data.get("status") == "SUCCESS":
+                    return True
+        else:
+            print(f"DEBUG: Bakong API Error Code -> {response.status_code}")
     except Exception as e:
-        print(f"DEBUG: Check Payment Error: {e}")
+        print(f"DEBUG: Connection Error -> {e}")
+        
     return False
 
 def auto_payment_worker(chat_id, message_id, p_hash, product_key, qty):
