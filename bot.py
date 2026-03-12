@@ -20,11 +20,11 @@ def run_web():
     app.run(host='0.0.0.0', port=port)
 
 # --- 2. ការកំណត់ TELEGRAM BOT & BAKONG ---
-TOKEN = '8614978833:AAHLO26tvHuxzufMWw6epc_mSPuEnzIoDwA'
+TOKEN = '8614978833:AAFbiZkZCarmUWZjJBKFoe18lyqUVzbSSls'
 bot = telebot.TeleBot(TOKEN)
 
 # Bakong Token របស់អ្នក
-BAKONG_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiMWUyN2QzM2NiYzNiNDkzNCJ9LCJpYXQiOjE3NzI5NTM5MDcsImV4cCI6MTc4MDcyOTkwN30.lPQ5rXUPyoyA2WCDMTfBFex9prg2MF6VOanKuBbArWU"
+BAKONG_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiMWUyN2QzM2NiYzNiNDkzNCJ9LCJpYXQiOjE3NzMzMjc5NDksImV4cCI6MTc4MTEwMzk0OX0.l7hf9D8k-_wGqLgdab4Tnon93ydGVL3hMI2gp4zumX0"
 
 # បញ្ជីផលិតផល (Product Key ត្រូវតែដូចឈ្មោះ File .txt)
 PRODUCTS = {
