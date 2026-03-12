@@ -24,7 +24,7 @@ TOKEN = '8614978833:AAFbiZkZCarmUWZjJBKFoe18lyqUVzbSSls'
 bot = telebot.TeleBot(TOKEN)
 
 # Bakong Token របស់អ្នក
-BAKONG_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiMWUyN2QzM2NiYzNiNDkzNCJ9LCJpYXQiOjE3NzMzMjkxODMsImV4cCI6MTc4MTEwNTE4M30.tQaFRnrhJD1sMxh_dQLuPwHYEQrEKo-XCyUtPUCAb2M"
+BAKONG_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiNzAwZmJlYzIxMDU5NDdmNCJ9LCJpYXQiOjE3NzMzMjk4MDUsImV4cCI6MTc4MTEwNTgwNX0.Zv9nxrwYtg_UFBeAx9fTrjG6m24xWcnSNhLQxs2Mzj4"
 
 # បញ្ជីផលិតផល (Product Key ត្រូវតែដូចឈ្មោះ File .txt)
 PRODUCTS = {
