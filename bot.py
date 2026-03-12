@@ -70,33 +70,27 @@ def extract_account_to_file(product_key, quantity=1):
 # --- 4. អនុគមន៍ឆែកការបង់ប្រាក់ (PAYMENT CHECK) ---
 def check_payment_status(p_hash):
     url = "https://api-bakong.nbc.gov.kh/v1/check_transaction_by_md5" 
+    
+    # ប្រាកដថា Token ថ្មី ហើយគ្មានដកឃ្លាខុសបច្ចេកទេស
     headers = {
-        "Authorization": f"Bearer {BAKONG_TOKEN}",
-        "Content-Type": "application/json"
+        "Authorization": f"Bearer {BAKONG_TOKEN.strip()}",
+        "Content-Type": "application/json",
+        "Accept": "application/json"
     }
+    
     payload = {"md5": p_hash} 
     try:
         response = requests.post(url, json=payload, headers=headers, timeout=15)
+        
+        # បន្ថែមការ Print ដើម្បីមើលក្នុង Logs ថាវាលោត 403 មែនអត់
+        print(f"DEBUG: Bakong Check -> Status: {response.status_code} | Body: {response.text}")
+        
         if response.status_code == 200:
             data = response.json()
-            # បន្ថែមការ Print នេះ ដើម្បីឱ្យអ្នកឃើញក្នុង Koyeb Logs ថា Bakong ឆ្លើយមកវិញថាអី
-            print(f"DEBUG: Bakong Response -> {data}")
-            
-            # លក្ខខណ្ឌទី១: ឆែកតាម Response Code
-            res_code = data.get("responseCode")
-            if res_code == 0 or res_code == "0":
+            if data.get("responseCode") == 0 or data.get("responseCode") == "0":
                 return True
-                
-            # លក្ខខណ្ឌទី២: ឆែកក្នុង Data Object (ករណីខ្លះ ResponseCode មិនមែន 0 តែ Status ជា SUCCESS)
-            inner_data = data.get("data")
-            if inner_data and isinstance(inner_data, dict):
-                if inner_data.get("status") == "SUCCESS":
-                    return True
-        else:
-            print(f"DEBUG: Bakong API Error Code -> {response.status_code}")
     except Exception as e:
-        print(f"DEBUG: Connection Error -> {e}")
-        
+        print(f"DEBUG: Error -> {e}")
     return False
 
 def auto_payment_worker(chat_id, message_id, p_hash, product_key, qty):
