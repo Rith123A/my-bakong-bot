@@ -77,14 +77,18 @@ def check_payment_status(p_hash):
     payload = {"md5": p_hash} 
     try:
         response = requests.post(url, json=payload, headers=headers, timeout=15)
+        data = response.json()
+        
+        # បន្ថែមបន្ទាត់នេះ ដើម្បីឱ្យវាបង្ហាញក្នុង Logs របស់ Koyeb
+        print(f"DEBUG: Bakong Check -> Hash: {p_hash} | Response: {data}")
+        
         if response.status_code == 200:
-            data = response.json()
             if data.get("responseCode") == 0 or data.get("responseCode") == "0":
                 return True
-            if isinstance(data.get("data"), dict) and data["data"].get("status") == "SUCCESS":
+            if data.get("data") and data["data"].get("status") == "SUCCESS":
                 return True
     except Exception as e:
-        print(f"Payment Check Error: {e}")
+        print(f"DEBUG: Check Payment Error: {e}")
     return False
 
 def auto_payment_worker(chat_id, message_id, p_hash, product_key, qty):
